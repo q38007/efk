@@ -8,7 +8,7 @@ metadata:
 data:
   system.conf: |-
     <system>
-      root_dir /tmp/fluentd-buffers/
+      root_dir /tmp/fluentd-buffers/  # 指定根目录
     </system>
   containers.input.conf: |-
     <source>
@@ -19,8 +19,10 @@ data:
       time_format %Y-%m-%dT%H:%M:%S.%NZ
       localtime
       tag raw.kubernetes.*
-      format json
-      read_from_head true
+      <parse>
+        @type json  # 日志格式
+      </parse>
+      read_from_head true  # 从文件头而不是底部开始读取日志
     </source>
     # Detect exceptions in the log output and forward them as one log entry.
     <match raw.kubernetes.**>
